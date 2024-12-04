@@ -1,15 +1,5 @@
+import type { ApplicationError } from './application-error.js';
 import type { Result } from './result.js';
-
-export class ApplicationError {
-	timestamp: Date;
-	context: string;
-
-	constructor(public readonly message: string) {
-		this.timestamp = new Date();
-
-		this.context = this.constructor.name;
-	}
-}
 
 export type QueryHandler<T extends Query, Output> = {
 	handle(query: T): Promise<Result<Output, ApplicationError>>;
