@@ -1,7 +1,7 @@
 {
 	"name": "picpay_cqrs_wallet_transfers",
 	"scripts": {
-		"dev": "tsx --env-file=.env --watch src/index.ts",
+		"dev": "tsx --env-file=.env --watch src/infra/app.ts",
 		"test": "vitest",
 		"lint": "biome lint"
 	},
@@ -13,5 +13,10 @@
 		"tsx": "^4.19.2",
 		"typescript": "^5.6.3",
 		"vitest": "^2.1.4"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.13.7",
+		"hono": "^4.6.11",
+		"zod": "^3.23.8"
 	}
 }
