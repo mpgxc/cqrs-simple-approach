@@ -1,3 +1,4 @@
+import { ApplicationError } from '../commons/application-error.js';
 import { Result } from '../commons/result.js';
 import type {
 	Command,
@@ -5,7 +6,6 @@ import type {
 	Query,
 	QueryHandler,
 } from '../commons/types.js';
-import { ApplicationError } from '../commons/types.js';
 
 export abstract class MessageBus<Handler, Message> {
 	private handlers: Map<string, Handler> = new Map();
