@@ -107,7 +107,7 @@ export class TransferCommand implements Command {
 		public payeeId: string,
 		public amount: number,
 	) {
-		this.command = 'TransferCommand';
+		this.command = TransferCommand.name;
 		this.timestamp = new Date();
 	}
 }
