@@ -32,17 +32,17 @@ export abstract class MessageBus<Handler, Message> {
 		return this.handlers;
 	}
 
-	abstract dispatch<Output = void>(
+	public abstract dispatch<Output = void>(
 		message: Message,
 	): Promise<Result<Output, ApplicationError>>;
 
-	abstract dispatchAll<Output = void>(
+	public abstract dispatchAll<Output = void>(
 		messages: Message[],
 	): Promise<Result<Output[], ApplicationError>>;
 }
 
 export class CommandBus extends MessageBus<CommandHandler<Command>, Command> {
-	async dispatch<Output = void>(
+	override async dispatch<Output = void>(
 		command: Command,
 	): Promise<Result<Output, ApplicationError>> {
 		const handler = this.getHandler(command.command);
@@ -66,7 +66,7 @@ export class CommandBus extends MessageBus<CommandHandler<Command>, Command> {
 		return Result.Ok();
 	}
 
-	async dispatchAll<Output = void>(
+	override async dispatchAll<Output = void>(
 		commands: Command[],
 	): Promise<Result<Output[], ApplicationError>> {
 		const finalized = await Promise.all(
@@ -84,5 +84,22 @@ export class CommandBus extends MessageBus<CommandHandler<Command>, Command> {
 		}
 
 		return Result.Ok();
+	}
+}
+
+/**
+ * Ainda precisa melhorar a implementação do QueryBus
+ */
+export class QueryBus extends MessageBus<QueryHandler<Query, unknown>, Query> {
+	async dispatch<Output = unknown>(
+		message: Query,
+	): Promise<Result<Output, ApplicationError>> {
+		throw new Error('Method not implemented.');
+	}
+
+	dispatchAll<Output = unknown>(
+		messages: Query[],
+	): Promise<Result<Output[], ApplicationError>> {
+		throw new Error('Method not implemented.');
 	}
 }
