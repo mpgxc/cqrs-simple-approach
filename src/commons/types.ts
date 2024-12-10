@@ -9,6 +9,10 @@ export interface CommandHandler<T extends Command> {
 	handle(command: T): Promise<Result<void, ApplicationError>>;
 }
 
+export interface Controller<T> {
+	handle(payload: T): Promise<Result<void, ApplicationError>>;
+}
+
 export interface Query {
 	readonly query: string;
 	readonly sort: string;

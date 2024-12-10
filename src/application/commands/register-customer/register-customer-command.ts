@@ -1,4 +1,4 @@
-import type { Command } from '../commons/types.js';
+import type { Command } from '../../../commons/types.js';
 
 export class RegisterCustomerCommand implements Command {
 	public command: string;

@@ -1,32 +1,10 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
-import { z } from 'zod';
-import { RegisterCustomerCommand } from '../commands/register-customer-command.js';
+import { RegisterCustomerController } from '../application/controllers/register-customer-controller.js';
+import { ApplicationErrorTranslatorSingleton } from '../commons/application-error.js';
 import { CommandBusSingleton } from './container.js';
 
-const commandBus = CommandBusSingleton.getInstance();
-
 const app = new Hono({ strict: true }).basePath('/api');
-
-const registerCustomerSchema = z.object({
-	document: z.string(),
-	email: z.string().email(),
-	fullName: z.string(),
-	password: z.string(),
-	phone: z.string(),
-	documentType: z.union([z.literal('Cpf'), z.literal('Cnpj')]),
-	role: z.union([z.literal('Customer'), z.literal('Lojista')]),
-});
-
-type RegisterCustomerRequest = z.infer<typeof registerCustomerSchema>;
-
-class RegisterCustomerController {
-	async handle(payload: RegisterCustomerRequest) {
-		const cmd = new RegisterCustomerCommand(payload);
-
-		await commandBus.dispatch(cmd);
-	}
-}
 
 const registerCustomerController = new RegisterCustomerController();
 
@@ -56,24 +34,29 @@ app.use(async (ctx, next) => {
 	await next();
 });
 
+const translator = ApplicationErrorTranslatorSingleton.getInstance();
+
 app.post('/register', async (ctx) => {
 	const payload = await ctx.req.json();
 
-	const validPayload = registerCustomerSchema.safeParse(payload);
+	const output = await registerCustomerController.handle(payload);
 
-	if (!validPayload.success) {
+	if (!output.isOk) {
+		const result = translator.getFormattedMessage(output.error);
+
 		return ctx.json(
 			{
-				message: 'Invalid payload',
-				errors: validPayload.error.errors,
+				message: result.message,
+				errors: [result.message],
+				timestamp: result.timestamp,
 			},
-			400,
+			result.statusCode,
 		);
 	}
 
-	await registerCustomerController.handle(payload);
-
-	return ctx.json({ message: 'Customer registered' });
+	return ctx.json({
+		message: 'Customer registered',
+	});
 });
 
 app.get('/', (ctx) => {

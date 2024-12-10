@@ -1,5 +1,5 @@
-import { RegisterCustomerCommandHandler } from '../commands/handlers/register-customer-command-handler.js';
-import { RegisterCustomerCommand } from '../commands/register-customer-command.js';
+import { RegisterCustomerCommandHandler } from '../application/commands/register-customer/register-customer-command-handler.js';
+import { RegisterCustomerCommand } from '../application/commands/register-customer/register-customer-command.js';
 import { CommandBus } from './command-bus.js';
 
 export class CommandBusSingleton {

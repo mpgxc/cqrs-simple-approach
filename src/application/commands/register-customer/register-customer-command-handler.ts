@@ -1,8 +1,8 @@
-import { ApplicationError } from '../../commons/application-error.js';
-import { Result } from '../../commons/result.js';
-import type { CommandHandler } from '../../commons/types.js';
-import { Customer } from '../../domain/customer.js';
-import type { RegisterCustomerCommand } from '../register-customer-command.js';
+import { ApplicationError } from '../../../commons/application-error.js';
+import { Result } from '../../../commons/result.js';
+import type { CommandHandler } from '../../../commons/types.js';
+import { Customer } from '../../../domain/customer.js';
+import type { RegisterCustomerCommand } from './register-customer-command.js';
 
 export class RegisterCustomerCommandHandler
 	implements CommandHandler<RegisterCustomerCommand>
